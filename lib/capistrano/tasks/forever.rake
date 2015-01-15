@@ -28,4 +28,5 @@ namespace :forever do
         invoke "deploy:start"
       end
     end
+  end
 end
