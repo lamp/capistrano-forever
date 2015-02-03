@@ -1,32 +1,45 @@
 namespace :forever do
-  desc "Start APP"
+  desc "Start forever process"
   task :start do
     on roles(:app), in: :sequence, wait: 5 do
       within release_path do
-        execute :forever, "start", "#{current_path}/app.js"
+        execute :forever, "start", "--uid #{fetch(:process_name)} #{current_path}/#{fetch(:entry_point)}"
       end
     end
   end
 
-  desc "Stop APP"
+  desc "Stop forever process"
   task :stop do
     on roles(:app), in: :sequence, wait: 5 do
       within release_path do
-        execute :forever, "stop", "#{current_path}/app.js"
+        execute :forever, "stop", fetch(:process_name)
       end
     end
   end
 
-  desc "Restart APP"
+  desc "Restart forever process (issues a full stop and start)"
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      # Forever seems to not actually reload the files when restarting
-      # causing production to be pointing at the old files
-      # until manually stopped
       within release_path do
         invoke "deploy:stop"
         invoke "deploy:start"
       end
     end
+  end
+
+  task :logs do
+    on roles(:app) do
+      on roles(:app) do
+        execute :forever, "logs", File.join(current_path, fetch(:entry_point))
+      end
+    end
+  end
+end
+
+namespace :load do
+  task :defaults do
+    set :process_name, fetch(:app_name)
+    set :entry_point, "app.js"
+    set :command, "node"
   end
 end
