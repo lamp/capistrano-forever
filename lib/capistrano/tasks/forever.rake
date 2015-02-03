@@ -27,11 +27,17 @@ namespace :forever do
     end
   end
 
+  desc "Tail logs of your app"
   task :logs do
     on roles(:app) do
-      on roles(:app) do
-        execute :forever, "logs", File.join(current_path, fetch(:entry_point))
-      end
+      execute :forever, "logs", File.join(current_path, fetch(:entry_point))
+    end
+  end
+
+  desc "Clean all server logs (NOTE: IF YOU ARE SHARING THIS SERVER WITH ANY OTHER FOREVER PROCESSES THEIR LOGS WILL BE CLEANED TOO)"
+  task :clean_logs do
+    on roles(:app) do
+      execute :forever, "cleanlogs"
     end
   end
 end
