@@ -1,10 +1,6 @@
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'capistrano-forever'
-
 Gem::Specification.new do |gem|
   gem.name          = "capistrano-forever"
-  gem.version       = Capistrano::Forever::VERSION
+  gem.version       = "0.0.1"
   gem.authors       = ["lamp"]
   gem.email         = ["matthew.gradidge@gmail.com"]
   gem.description   = %q{}
